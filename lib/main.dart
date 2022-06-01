@@ -1,4 +1,5 @@
 import 'package:driverantar/config/app_config.dart';
+import 'package:driverantar/page/list-order/detail_order_page.dart';
 import 'package:driverantar/page/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,12 +28,15 @@ class MyApp extends StatelessWidget {
             title: 'Driver App : ' + envApp ,
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-                primarySwatch: Colors.blue,
-            ),
-                home: LoginPage(),
-            );
-        }
+                    primarySwatch: Colors.blue,
+                ),
+            home: LoginPage(),
+            routes: {
+                DetailOrderPage.routeName:(context) => DetailOrderPage(),
+            },
+        );
     }
+}
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);

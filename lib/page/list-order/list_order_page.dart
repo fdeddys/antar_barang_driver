@@ -1,4 +1,6 @@
+import 'package:driverantar/model/screen_argument.dart';
 import 'package:driverantar/model/transaksi_model.dart';
+import 'package:driverantar/page/list-order/detail_order_page.dart';
 import 'package:driverantar/repository/transaksi_repository.dart';
 import 'package:driverantar/service/transaksi-service.dart';
 import 'package:flutter/material.dart';
@@ -141,9 +143,24 @@ class _ListOrderPageState extends State<ListOrderPage> {
                     jamAntar(transaksi.jamRequestAntar, transaksi.tanggalRequestAntarStr),
                     keterangan(transaksi.keterangan),
                     statusName(transaksi.statusName),
+                    
+                    btnProses(transaksi),
                 ],
             ),
-            );
+        );
+    }
+
+    Widget btnProses(Transaksi transaksi){
+        return ElevatedButton(
+            onPressed: (){
+                Navigator.pushNamed(
+                    context, 
+                    DetailOrderPage.routeName,
+                    arguments: ScreenArgument(transaksi)
+                );
+            }, 
+            child: const Text("Process...!")
+        );
     }
 
     Widget titlePanel(String sellerName, String sellerHp, String sellerAddress){
