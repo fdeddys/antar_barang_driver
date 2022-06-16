@@ -41,10 +41,11 @@ class _ListOrderPageState extends State<ListOrderPage> {
     getData() async {
         var sellerName = textSearchController.text;
         transaksis =
-            await transaksiService.getByTodayByDriverPage(sellerName, page, maxRecord);
+            await transaksiService.getByTodayByDriverPage(sellerName);
         setState(() => {
-            print("Set state :" + transaksis.length.toString())
+            debugPrint("Set state :" + transaksis.length.toString())
         });
+        debugPrint("done get data async!");
     }
 
     searchPress() async {
@@ -76,7 +77,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
                                 child: Column(
                                     children: [
                                         panelSearch(),
-                                        btnSearch(),
+                                        // btnSearch(),
                                         panelList(),
                                     ],
                                 ),
@@ -86,6 +87,24 @@ class _ListOrderPageState extends State<ListOrderPage> {
     }
 
     Widget panelSearch(){
+        return
+            Card(
+                child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                        children: [
+                            textSearch(),
+                            const SizedBox(
+                                height: 10,
+                            ),
+                            btnSearch()
+                        ],
+                    ),
+                ),
+            );
+    }
+
+    Widget textSearch(){
         return TextFormField(
             // validator: (value) {
             //     if (value == null || value.isEmpty) {
@@ -97,7 +116,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
             style: const TextStyle(
                 color: Colors.black87,
             ),
-            autofocus: true,
+            // autofocus: true,
             maxLength: 100,
             controller: textSearchController,
             decoration: const InputDecoration(
@@ -248,6 +267,28 @@ class _ListOrderPageState extends State<ListOrderPage> {
     }
 
     Widget btnSearch() {
+        return
+            SizedBox(
+                width: MediaQuery.of(context).size.width * 2 / 3,
+                child: FloatingActionButton.extended(
+                    label: const Text('Search'), 
+                    backgroundColor: Colors.blue.shade400,
+                    icon: const Icon( 
+                        Icons.search_rounded,
+                        size: 20,
+                    ),
+                    foregroundColor: Colors.white,
+                    onPressed: () async {
+                        if (_formKeySearchListOrder.currentState!.validate()) {
+                        searchPress();
+                    }
+                        
+                    },
+                ),
+            );
+    }
+
+    Widget btnSearchX() {
         return Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: Material(

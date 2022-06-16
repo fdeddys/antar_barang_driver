@@ -32,10 +32,10 @@ class _LoginPageState extends State<LoginPage> {
         debugPrint('Service : Login press');
         LoginResultDto resultLogin = await driverService.login(loginDto);
     
-        if (resultLogin.isSuccess != true) {
+        if (resultLogin.errCode != "00") {
             debugPrint("page: login failed");
             Fluttertoast.showToast(
-                msg: "Login Failed !" + resultLogin.content,
+                msg: "Login Failed !" + resultLogin.errDesc,
                 toastLength: Toast.LENGTH_SHORT,
                 gravity: ToastGravity.CENTER,
                 timeInSecForIosWeb: 1,
@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                                             Image.asset("images/E1.png")
                                     ),
                                 ),
-                                ),
+                            ),
                         ],
                     ),
                     SingleChildScrollView(
@@ -150,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
         );
     }
 
-    Widget btnLogin() {
+    Widget btnLoginx() {
         return Padding(
             padding: const EdgeInsets.all(8),
             child: Material(
@@ -173,6 +173,30 @@ class _LoginPageState extends State<LoginPage> {
                 ),
             ),
         );
+    }
+
+    Widget btnLogin() {
+        return
+            Center(
+              child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 2 / 3,
+                  child: FloatingActionButton.extended(
+                      label: const Text('Login'), 
+                      backgroundColor: Colors.blue.shade400,
+                      icon: const Icon( 
+                          Icons.supervisor_account,
+                          size: 24.0,
+                          color: Colors.white,
+                      ),
+                      foregroundColor: Colors.white,
+                      onPressed: () async {               
+                          if (_formKey.currentState!.validate()) {
+                              loginPress();
+                          }
+                      },
+                  ),
+              ),
+            );
     }
 
 }

@@ -33,10 +33,10 @@ class _MainMenuState extends State<MainMenu> {
     @override
     Widget build(BuildContext context) {
         return Scaffold(
-            appBar: 
-                AppBar(
-                    title: Text(widgetTitle.elementAt(selectedIndex))
-                ),
+            // appBar: 
+            //     AppBar(
+            //         title: Text(widgetTitle.elementAt(selectedIndex))
+            //     ),
             body: 
                 Center(child: IndexedStack(
                         index: selectedIndex,

@@ -4,6 +4,7 @@ import 'package:driverantar/service/transaksi-service.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 
 class PickOrderPage extends StatefulWidget {
@@ -16,6 +17,8 @@ class PickOrderPage extends StatefulWidget {
 class _PickOrderPageState extends State<PickOrderPage> {
     
     final _formKeySearchPickOrder = GlobalKey<FormState>();
+
+    DateTime tglSearch = DateTime.now();
 
     TextEditingController textSearchController = TextEditingController();
     int totalRecords = 0;
@@ -39,10 +42,13 @@ class _PickOrderPageState extends State<PickOrderPage> {
 
     getData() async {
         // var sellerName = textSearchController.text;
+        var outputFormat = DateFormat('yyyy/MM/dd');
+        var outputDate = outputFormat.format(tglSearch);
+
         transaksis =
-            await transaksiService.getNewTransaksiByDate( page, maxRecord);
+            await transaksiService.getGrabTransaksiByRequestDate( outputDate,page, maxRecord);
         setState(() => {
-            print("Set state :" + transaksis.length.toString())
+            debugPrint("Set state :" + transaksis.length.toString())
         });
     }
 
@@ -102,8 +108,12 @@ class _PickOrderPageState extends State<PickOrderPage> {
                                 const EdgeInsets.all(8.0),
                                 child: Column(
                                     children: [
-                                        // panelSearch(),
-                                        btnSearch(),
+                                        panelSearch(),
+                                        // getDate(),
+                                        // const SizedBox(
+                                        //     height:  25,
+                                        // ),
+                                        // btnSearch(),
                                         panelList(),
                                     ],
                                 ),
@@ -112,21 +122,121 @@ class _PickOrderPageState extends State<PickOrderPage> {
         );
     }
 
-    Widget panelSearch(){
-        return TextFormField(
-            maxLines: 1,
-            style: const TextStyle(
-                color: Colors.black87,
-            ),
-            autofocus: true,
-            maxLength: 100,
-            controller: textSearchController,
-            decoration: const InputDecoration(
-                labelText: "Seller name",
-                fillColor: Colors.black87,
-                icon: Icon(Icons.account_circle)),
-        );
+    Widget panelSearch() {
+        return
+            Card(
+                color: Colors.white,
+                child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                        children: [
+                            getDate(),
+                            const SizedBox(
+                                height:  10,
+                            ),
+                            btnSearch(),
+                            const SizedBox(
+                                height:  10,
+                            ),
+                        ],
+                    ),
+                ),
+            );
     }
+
+
+    Widget getDate(){
+        return
+            Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                        // Text('Tanggal Request Antar : ${tglSearch.year}-${tglSearch.month}-${tglSearch.day}',
+                        // Text('Tanggal Request Antar :  ${tglSearch.day.toString().padLeft(2, '0')}-${tglSearch.month.toString().padLeft(2, '0')}-${tglSearch.year.toString()}',
+                        // Text('Tanggal Request Antar :  ${DateFormat('dd-MMM-yyyy').format(tglSearch)} ',
+                        //     style: TextStyle(
+                        //                 color: Colors.green.shade400,
+                        //                 fontSize: 16,
+                        //             )
+                        // ),
+                        RichText(
+                            text: TextSpan(
+                                    children: [
+                                        const WidgetSpan(
+                                            child: Icon(Icons.date_range, size: 24, color: Colors.blue,),
+                                        ),
+                                        TextSpan(
+                                            text: 
+                                                ' Tanggal Request Antar :  ',
+                                                    style: TextStyle(
+                                                        color: Colors.green.shade400,
+                                                        fontSize: 16,
+                                                    )
+                                        ),
+                                        TextSpan(
+                                            text: ' ${DateFormat('dd-MMM-yyyy').format(tglSearch)} ',
+                                                    style: const TextStyle(
+                                                        color: Colors.redAccent,
+                                                        fontSize: 16,
+                                                    )
+                                        )
+                                    ]
+                            ) 
+                        ),
+                        btnPilihTanggal(),
+                    ],
+                ),
+            );
+    }
+
+    Widget btnPilihTanggal(){
+        return
+            FloatingActionButton.extended(
+                label: const Text('Pilih Tanggal'), 
+                backgroundColor: Colors.redAccent.shade100,
+                icon: const Icon( 
+                    Icons.date_range_rounded,
+                    size: 14.0,
+                ),
+                onPressed: () async {
+                    
+                    DateTime? pickedDate = await showDatePicker(
+                        context: context, 
+                        initialDate: DateTime.now(), 
+                        firstDate: DateTime.now(), 
+                        lastDate: DateTime(2100),
+                        helpText: 'Tanggal Antar',
+                        initialEntryMode: DatePickerEntryMode.calendar,
+                        errorFormatText: 'Enter valid date',
+                        errorInvalidText: 'Enter date in valid range',
+                    );
+                    if (pickedDate != null && pickedDate != tglSearch){
+                        setState(() {
+                            tglSearch = pickedDate;
+                        });
+                    }
+                    
+                },
+            );
+    }
+
+    // Widget panelSearch(){
+    //     return TextFormField(
+    //         maxLines: 1,
+    //         style: const TextStyle(
+    //             color: Colors.black87,
+    //         ),
+    //         autofocus: true,
+    //         maxLength: 100,
+    //         controller: textSearchController,
+    //         decoration: const InputDecoration(
+    //             labelText: "Seller name",
+    //             fillColor: Colors.black87,
+    //             icon: Icon(Icons.account_circle)),
+    //     );
+    // }
 
     Widget panelList(){
         return
@@ -270,27 +380,50 @@ class _PickOrderPageState extends State<PickOrderPage> {
     }
 
     Widget btnSearch() {
-        return Padding(
-            padding: const EdgeInsets.all(8),
-            child: Material(
-                elevation: 5.0,
-                borderRadius: BorderRadius.circular(22.0),
-                color: Colors.blue.shade400,
-                child: MaterialButton(
-                minWidth: MediaQuery.of(context).size.width - 40,
-                padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                onPressed: () {
-                    if (_formKeySearchPickOrder.currentState!.validate()) {
-                        searchPress();
-                    }
-                },
-                child: const Text(
-                    "Search",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        return
+            SizedBox(
+                width: MediaQuery.of(context).size.width * 2 / 3,
+                child: FloatingActionButton.extended(
+                    label: const Text('Search'), 
+                    backgroundColor: Colors.blue.shade400,
+                    icon: const Icon( 
+                        Icons.search_rounded,
+                        size: 20,
+                    ),
+                    foregroundColor: Colors.white,
+                    onPressed: () async {
+                        
+                        if (_formKeySearchPickOrder.currentState!.validate()) {
+                            searchPress();
+                        }
+                        
+                    },
                 ),
-                ),
-            ),
-        );
+            );
     }
+
+    // Widget btnSearch2() {
+    //     return Padding(
+    //         padding: const EdgeInsets.all(8),
+    //         child: Material(
+    //             elevation: 5.0,
+    //             borderRadius: BorderRadius.circular(22.0),
+    //             color: Colors.blue.shade400,
+    //             child: MaterialButton(
+    //             minWidth: MediaQuery.of(context).size.width - 40,
+    //             padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+    //             onPressed: () {
+    //                 if (_formKeySearchPickOrder.currentState!.validate()) {
+    //                     searchPress();
+    //                 }
+    //             },
+    //             child: const Text(
+    //                 "Search",
+    //                 textAlign: TextAlign.center,
+    //                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+    //             ),
+    //             ),
+    //         ),
+    //     );
+    // }
 }

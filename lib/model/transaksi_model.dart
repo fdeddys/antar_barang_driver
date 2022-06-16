@@ -22,8 +22,8 @@ class Transaksi {
     final String customerName;
     final String customerAddress;
     final String customerHp;
-    final int status;
-    final String statusName;
+    int status;
+    String statusName;
     final String lastUpdateBy;
     final String lastUpdateStr;
 

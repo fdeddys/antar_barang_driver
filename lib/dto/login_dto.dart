@@ -16,17 +16,21 @@ class LoginDto {
 
 
 class LoginResultDto {
-    final bool isSuccess;
-    final String content;
+    // final bool isSuccess;
+    final String token;
+    final String errCode;
+    final String errDesc;
 
-    LoginResultDto(this.isSuccess, this.content);
+    LoginResultDto( this.token, this.errCode, this.errDesc);
 
     LoginResultDto.fromJson(Map jsonMap)
-        : isSuccess = jsonMap['isSuccess'],
-            content = jsonMap['content'];
+        : token = jsonMap['token'],
+            errCode = jsonMap['errCode'],
+            errDesc = jsonMap['errDesc'];
 
     Map toJson() => {
-            'isSuccess': isSuccess,
-            'content': content,
+            'token': token,
+            'errCode': errCode,
+            'errDesc': errDesc,
         };
 }
