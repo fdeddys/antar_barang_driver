@@ -63,6 +63,18 @@ class DriverService {
         return result;
     }
 
-
+    clearCache() async {
+        final prefs = await SharedPreferences.getInstance();
+        
+        await prefs.remove('driver-id');
+        await prefs.remove('driver-alamat');
+        await prefs.remove('driver-hp');
+        await prefs.remove('driver-kode');
+        await prefs.remove('driver-nama');
+        await prefs.remove('driver-photo');  
+        await prefs.remove('driver-code');
+        await prefs.remove('token');
+        
+    }
 
 }

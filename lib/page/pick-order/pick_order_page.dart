@@ -169,7 +169,7 @@ class _PickOrderPageState extends State<PickOrderPage> {
                                         ),
                                         TextSpan(
                                             text: 
-                                                ' Tanggal Request Antar :  ',
+                                                ' Tgl Antar :  ',
                                                     style: TextStyle(
                                                         color: Colors.green.shade400,
                                                         fontSize: 16,
@@ -194,11 +194,11 @@ class _PickOrderPageState extends State<PickOrderPage> {
     Widget btnPilihTanggal(){
         return
             FloatingActionButton.extended(
-                label: const Text('Pilih Tanggal'), 
+                label: const Text(''), 
                 backgroundColor: Colors.redAccent.shade100,
                 icon: const Icon( 
                     Icons.date_range_rounded,
-                    size: 14.0,
+                    size: 20.0,
                 ),
                 onPressed: () async {
                     

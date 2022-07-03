@@ -8,6 +8,12 @@ import 'package:intl/intl.dart';
 
 class Utilities {
 
+    static bool isNumeric(String s) {
+    if(s == null) {
+        return false;
+    }
+       return double.tryParse(s) != null;
+    }
     // static Future<String> getToken() async {
     //     debugPrint("set signature");
     //     final prefs = await SharedPreferences.getInstance();

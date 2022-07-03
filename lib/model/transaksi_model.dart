@@ -26,6 +26,8 @@ class Transaksi {
     String statusName;
     final String lastUpdateBy;
     final String lastUpdateStr;
+    final String custLng;
+    final String custLat;
 
 
     Transaksi(
@@ -53,7 +55,10 @@ class Transaksi {
         this.status, 
         this.statusName,
         this.lastUpdateBy, 
-        this.lastUpdateStr);
+        this.lastUpdateStr,
+        this.custLng,
+        this.custLat,
+        );
     
     Transaksi.fromJson(Map jsonMap)
         : id = jsonMap['id'], 
@@ -80,7 +85,9 @@ class Transaksi {
         status = jsonMap['status'],
         statusName = jsonMap['statusName'],
         lastUpdateStr = jsonMap['lastUpdateStr'],
-        lastUpdateBy = jsonMap['lastUpdateBy'];
+        lastUpdateBy = jsonMap['lastUpdateBy'],
+        custLng = jsonMap['custLng'],
+        custLat = jsonMap['custLat'];
     
     Map toJson() => {
         'id': id,
@@ -107,7 +114,9 @@ class Transaksi {
         'status':status,
         'statusName':statusName,
         'lastUpdateStr' : lastUpdateStr,
-        'lastUpdateBy':lastUpdateBy
+        'lastUpdateBy':lastUpdateBy,
+        'custLng' : custLng,
+        'custLat':custLat
     };
 
 }

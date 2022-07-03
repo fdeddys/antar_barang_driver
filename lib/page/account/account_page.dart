@@ -1,6 +1,10 @@
 import 'package:driverantar/page/account/change_password_page.dart';
+import 'package:driverantar/page/login/login_page.dart';
+import 'package:driverantar/repository/driver_repository.dart';
+import 'package:driverantar/service/driver-service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class UserPage extends StatefulWidget {
   UserPage({Key? key}) : super(key: key);
@@ -16,6 +20,9 @@ class _UserPageState extends State<UserPage> {
     String nama = "";
     String alamat = "";
     String hp = "";
+
+    DriverService driverService = DriverService(repository: DriverRepository(client: http.Client()));
+    
     @override
     void initState() {
         super.initState();
@@ -23,9 +30,20 @@ class _UserPageState extends State<UserPage> {
     }
 
     changePass() {
+        
         Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const ChangePasswordPage()),
+        );
+    }
+
+    logoutAction() async{
+
+        await driverService.clearCache();
+    
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()),
         );
     }
 
@@ -61,7 +79,9 @@ class _UserPageState extends State<UserPage> {
                                         rowKode(),
                                         rowNama(),
                                         rowAlamat(),
-                                        btnChangePass()
+                                        btnChangePass(),
+                                        SizedBox(height: 10,),
+                                        btnLogout()
                                     ],
                                 ),
                         ),
@@ -120,4 +140,20 @@ class _UserPageState extends State<UserPage> {
                 },
             );
     }
+
+    Widget btnLogout(){
+        return
+            FloatingActionButton.extended(
+                label: const Text('Logout'), 
+                backgroundColor: Colors.red.shade400,
+                icon: const Icon( 
+                    Icons.logout_rounded,
+                    size: 20.0,
+                ),
+                onPressed: () {
+                    logoutAction();
+                },
+            );
+    }
+
 }

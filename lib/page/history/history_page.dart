@@ -111,7 +111,7 @@ class _HistoryPageState extends State<HistoryPage> {
     Widget getDate(){
         return
             Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -124,7 +124,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                         ),
                                         TextSpan(
                                             text: 
-                                                ' Tanggal Transaksi :  ',
+                                                'Tgl Transaksi :  ',
                                                     style: TextStyle(
                                                         color: Colors.green.shade400,
                                                         fontSize: 16,
@@ -149,11 +149,11 @@ class _HistoryPageState extends State<HistoryPage> {
     Widget btnPilihTanggal(){
         return
             FloatingActionButton.extended(
-                label: const Text('Pilih Tanggal'), 
+                label: const Text(''), 
                 backgroundColor: Colors.redAccent.shade100,
                 icon: const Icon( 
                     Icons.date_range_rounded,
-                    size: 14.0,
+                    size: 24,
                 ),
                 onPressed: () async {
                     

@@ -3,15 +3,17 @@ import 'package:driverantar/model/transaksi_model.dart';
 import 'package:driverantar/page/list-order/detail_order_page.dart';
 import 'package:driverantar/repository/transaksi_repository.dart';
 import 'package:driverantar/service/transaksi-service.dart';
+import 'package:driverantar/util/mapUtils.dart';
+import 'package:driverantar/util/util_signature.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class ListOrderPage extends StatefulWidget {
-  ListOrderPage({Key? key}) : super(key: key);
+    ListOrderPage({Key? key}) : super(key: key);
 
-  @override
-  State<ListOrderPage> createState() => _ListOrderPageState();
+    @override
+    State<ListOrderPage> createState() => _ListOrderPageState();
 }
 
 class _ListOrderPageState extends State<ListOrderPage> {
@@ -162,14 +164,20 @@ class _ListOrderPageState extends State<ListOrderPage> {
                     jamAntar(transaksi.jamRequestAntar, transaksi.tanggalRequestAntarStr),
                     keterangan(transaksi.keterangan),
                     statusName(transaksi.statusName),
-                    
-                    btnProses(transaksi),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                            btnProses(transaksi),
+                            btnOpenMap(transaksi),
+                        ],
+                    )
                 ],
             ),
         );
     }
 
-    Widget btnProses(Transaksi transaksi){
+    Widget btnProses2(Transaksi transaksi){
         return ElevatedButton(
             onPressed: (){
                 Navigator.pushNamed(
@@ -181,6 +189,51 @@ class _ListOrderPageState extends State<ListOrderPage> {
             child: const Text("Process...!")
         );
     }
+
+     Widget btnProses(Transaksi transaksi){
+        return 
+            FloatingActionButton.extended(
+                label: const Text('Proses..'), 
+                backgroundColor: Colors.blue.shade400,
+                icon: const Icon( 
+                    Icons.power_rounded,
+                    size: 12.0,
+                ),
+                foregroundColor: Colors.white,
+                onPressed: () async {
+                    Navigator.pushNamed(
+                    context, 
+                    DetailOrderPage.routeName,
+                    arguments: ScreenArgument(transaksi)
+                );
+                },
+            );
+    }
+
+    Widget btnOpenMap(Transaksi transaksi) {
+        return
+            FloatingActionButton.extended(
+                label: const Text('Open Map'), 
+                backgroundColor: Colors.red.shade400,
+                icon: const Icon( 
+                    Icons.map_rounded,
+                    size: 12.0,
+                ),
+                foregroundColor: Colors.white,
+                onPressed: () async {
+                    if (Utilities.isNumeric(transaksi.custLat) && Utilities.isNumeric(transaksi.custLng) ) {
+
+                        final lat = double.parse(transaksi.custLat);
+                        final lng = double.parse(transaksi.custLng);    
+                        if (_formKeySearchListOrder.currentState!.validate()) {
+                            MapUtils.openMap( lat, lng);
+                            // MapUtils.openMap(-6.175299,106.826965);
+                        }
+                    }
+                },
+            );
+    }
+
 
     Widget titlePanel(String sellerName, String sellerHp, String sellerAddress){
         return
@@ -275,7 +328,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
                     backgroundColor: Colors.blue.shade400,
                     icon: const Icon( 
                         Icons.search_rounded,
-                        size: 20,
+                        size: 14.0,
                     ),
                     foregroundColor: Colors.white,
                     onPressed: () async {
